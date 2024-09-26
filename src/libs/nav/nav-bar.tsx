@@ -1,26 +1,31 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import { ChartBarIcon, Bars3Icon } from '@heroicons/react/24/solid'
-import { Link } from 'react-router-dom';
-import { useAuth } from '../auth/use-auth-hook';
-import { Tooltip, Avatar } from '@mui/material';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import Container from "@mui/material/Container";
+import Button from "@mui/material/Button";
+import MenuItem from "@mui/material/MenuItem";
+import { ChartBarIcon, Bars3Icon } from "@heroicons/react/24/solid";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../auth/use-auth-hook";
+import { Tooltip, Avatar } from "@mui/material";
+import { DATAGETS_TITLE } from "../shared-ui/constants";
 
-
-const pages = ['Home', 'Services', 'Contact', 'Analytics'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ["Home", "Services", "Contact", "Analytics"];
+const settings = ["Profile", "Account", "Dashboard", "Logout"];
 
 const NavBar = () => {
   const { isAuthenticated, logout, username } = useAuth();
-  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
-  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
+  const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
+    null
+  );
+  const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+    null
+  );
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -29,8 +34,11 @@ const NavBar = () => {
     setAnchorElUser(event.currentTarget);
   };
 
-  const handleCloseNavMenu = () => {
+  const handleCloseNavMenu = (page?: string) => {
     setAnchorElNav(null);
+    if (page) {
+      navigate(page);
+    }
   };
 
   const handleCloseUserMenu = () => {
@@ -38,109 +46,120 @@ const NavBar = () => {
   };
 
   const handleMenuActionAndCloseUserMenu = (setting: string) => {
-    if(setting === 'Logout'){
+    if (setting === "Logout") {
       logout();
     }
     handleCloseUserMenu();
-  }
+  };
 
   const renderLoginOptions = () => {
-    if(isAuthenticated){
+    if (isAuthenticated) {
       return (
         <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0}}>
-                <Avatar alt={username} src="/static/images/avatar/2.jpg" />
-              </IconButton>
-            </Tooltip>
-            <Menu
-              sx={{ mt: '45px' }}
-              id="menu-appbar"
-              anchorEl={anchorElUser}
-              anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
-              }}
-              open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
-            >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={() => handleMenuActionAndCloseUserMenu(setting)}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
-          </Box>
+          <Tooltip title="Open settings">
+            <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+              <Avatar alt={username} src="/static/images/avatar/2.jpg" />
+            </IconButton>
+          </Tooltip>
+          <Menu
+            sx={{ mt: "45px" }}
+            id="menu-appbar"
+            anchorEl={anchorElUser}
+            anchorOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            keepMounted
+            transformOrigin={{
+              vertical: "top",
+              horizontal: "right",
+            }}
+            open={Boolean(anchorElUser)}
+            onClose={handleCloseUserMenu}
+          >
+            {settings.map((setting) => (
+              <MenuItem
+                key={setting}
+                onClick={() => handleMenuActionAndCloseUserMenu(setting)}
+              >
+                <Typography sx={{ textAlign: "center" }}>{setting}</Typography>
+              </MenuItem>
+            ))}
+          </Menu>
+        </Box>
       );
     } else {
       return (
-          <Button key={'login'} onClick={handleCloseNavMenu} sx={{ my: 2, color: 'white', display: 'block' }}>
-            <Link to={'login'}>{'Login'}</Link>
-          </Button>
-        )
+        <Button
+          variant="contained"
+          key={"login"}
+          onClick={() => handleCloseNavMenu("login")}
+        >
+          Login
+        </Button>
+      );
     }
-  }
+  };
+
+  const renderTitle = () => {
+    return (
+      <Typography
+        variant="h6"
+        noWrap
+        component="a"
+        href="#app-bar-with-responsive-menu"
+        sx={{
+          mr: 2,
+          display: { xs: "none", md: "flex" },
+          fontFamily: "monospace",
+          fontWeight: 700,
+          letterSpacing: ".3rem",
+          textDecoration: "none",
+        }}
+      >
+        {DATAGETS_TITLE}
+      </Typography>
+    );
+  };
 
   return (
-    <AppBar position="static" sx={{ backgroundColor: '#17153B', }}>
+    <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <div className='pr-4'>
-          <ChartBarIcon className="size-6 fill-white"/>
+          <div className="pr-4">
+            <ChartBarIcon className="size-6 fill-white" />
           </div>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-            }}
-          >
-            DATAGETS
-          </Typography>
+          {renderTitle()}
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
               onClick={handleOpenNavMenu}
-              color="inherit"
             >
-              <Bars3Icon  className="size-6 fill-white"/>
+              <Bars3Icon className="size-6 fill-white" />
             </IconButton>
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              onClose={() => handleCloseNavMenu()}
+              sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Link to={page}><Typography sx={{ textAlign: 'center' }}>{page}</Typography></Link>
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -152,25 +171,24 @@ const NavBar = () => {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              textDecoration: "none",
             }}
           >
-            DATAGETS
+            {DATAGETS_TITLE}
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
+                variant="contained"
                 key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                onClick={() => handleCloseNavMenu(page)}
               >
-                <Link to={page}>{page}</Link>
+                {page}
               </Button>
             ))}
           </Box>
@@ -179,9 +197,5 @@ const NavBar = () => {
       </Container>
     </AppBar>
   );
-}
+};
 export default NavBar;
-
-function useState(arg0: boolean): [any, any] {
-  throw new Error('Function not implemented.');
-}

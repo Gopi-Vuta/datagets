@@ -7,11 +7,15 @@ import Login from './libs/login/login';
 import { AuthProvider } from './libs/auth/authorisation-provider';
 import ProtectedRoute from './libs/auth/protected-route';
 import Analytics from './libs/analytics/analytics';
+import { ThemeProvider } from '@emotion/react';
+import useCustomTheme from './libs/hooks/useCustomTheme';
+
 
 function App() {
+  const theme = useCustomTheme({mode: 'light'});
   return (
-    <>
-      <AuthProvider>
+    <AuthProvider>
+      <ThemeProvider theme={theme}>
         <NavBar/>
         <div>
           <Routes>        
@@ -30,8 +34,8 @@ function App() {
             <Route path="*" element={<Navigate to="/home" />} />
           </Routes>
         </div>
-      </AuthProvider>
-    </>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 
