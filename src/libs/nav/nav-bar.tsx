@@ -101,6 +101,13 @@ const NavBar = () => {
     }
   };
 
+  const showAuthenticatedPage = (page: string) => {
+    if (page === "Analytics") {
+      return isAuthenticated ? page : "";
+    }
+    return page;
+  };
+
   const renderTitle = () => {
     return (
       <Typography
@@ -157,11 +164,13 @@ const NavBar = () => {
               onClose={() => handleCloseNavMenu()}
               sx={{ display: { xs: "block", md: "none" } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
-                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
-                </MenuItem>
-              ))}
+              {pages
+                .filter((page) => showAuthenticatedPage(page))
+                .map((page) => (
+                  <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                    <Typography sx={{ textAlign: "center" }}>{page}</Typography>
+                  </MenuItem>
+                ))}
             </Menu>
           </Box>
           <Typography
@@ -182,15 +191,17 @@ const NavBar = () => {
             {DATAGETS_TITLE}
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button
-                variant="contained"
-                key={page}
-                onClick={() => handleCloseNavMenu(page)}
-              >
-                {page}
-              </Button>
-            ))}
+            {pages
+              .filter((page) => showAuthenticatedPage(page))
+              .map((page) => (
+                <Button
+                  variant="contained"
+                  key={page}
+                  onClick={() => handleCloseNavMenu(page)}
+                >
+                  {page}
+                </Button>
+              ))}
           </Box>
           {renderLoginOptions()}
         </Toolbar>
