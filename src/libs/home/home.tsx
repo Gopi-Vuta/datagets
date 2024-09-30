@@ -9,13 +9,9 @@ const Home = () => {
   const { username, isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
-  const userGreeting: string = isAuthenticated
-    ? `HI ${username.toUpperCase()}, `
-    : "";
-
   return (
     <div className="flex justify-center items-center flex-col">
-      <div className="flex w-full mt-40 mb-48 px-72">
+      <div className="flex mt-40 mb-48">
         <div>
           <img
             src="https://img1.wsimg.com/isteam/stock/1YEW15Z/:/rs=w:772,h:500,cg:true,m/cr=w:772,h:500"
@@ -26,9 +22,6 @@ const Home = () => {
         </div>
         <div className="flex bg-gray-1">
           <div className="flex w-128 justify-center items-center flex-col gap-6">
-            <div className="flex">
-              <Typography>{userGreeting}WELCOME</Typography>
-            </div>
             <div className="flex mx-4">
               <p className="text-5xl text-center">
                 Drive business impact from your data
@@ -49,14 +42,14 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="flex w-full px-72">
-        <div className="w-1/2">
+      <div className="flex">
+        <div className="flex bg-gray-1 w-[37rem]">
           <img
             src="https://img1.wsimg.com/isteam/ip/b74283d7-df57-4724-872f-dc408d647ff5/blob-3c58943.png/:/cr=t:0%25,l:5.65%25,w:66.67%25,h:100%25/rs=w:1200,h:1200,cg:true"
             alt="image about us"
           />
         </div>
-        <div className="w-1/2">
+        <div className="flex w-[39rem]">
           <div className="ml-24 mt-32">
             <div className="flex justify-center items-center">
               <div className="font-medium text-4xl text-main-medium">
